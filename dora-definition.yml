@@ -1,0 +1,44 @@
+application: excalidraw
+
+deploiement:
+  # Un déploiement = un déploiement vers l'environnement de PRODUCTION
+  # (excalidraw.com), c'est-à-dire toute entrée où le champ "environment"
+  # renvoyé par l'API vaut "production" (à vérifier concrètement dans les
+  # réponses de l'outil de déploiement avant de valider ce choix).
+  compte_comme_deploiement: "environment == production (build effectivement mis en ligne sur excalidraw.com)"
+  exclut: ["preview", "development", "staging", "branch-deploy"]
+
+  # On retient l'instant où le déploiement passe au statut "success"
+  # (READY/live), pas la création de l'évènement (queued/building).
+  # Raison : la création peut échouer ou être annulée ; seul le succès
+  # correspond à un changement réellement en production.
+  horodatage: "passage au statut success (READY), pas la création de l'évènement"
+
+changement:
+  # Date du commit de merge sur la branche par défaut (main/master),
+  # pas l'ouverture de la PR : le lead time DORA se mesure du commit
+  # jusqu'au déploiement en prod, pas depuis l'intention de changement.
+  point_de_depart: "date du commit sur la branche par défaut (merge commit)"
+
+incident:
+  # L'équipe n'exploite pas la prod d'excalidraw (pas d'astreinte, pas
+  # d'outil d'incident management dédié). On assume donc explicitement
+  # qu'on mesure un PROXY, pas la métrique DORA "incident" au sens strict.
+  definition: "proxy : issue GitHub taguée bug/regression et jugée bloquante, PAS un incident DORA au sens strict (pas d'astreinte réelle)"
+  source: "GitHub Issues (labels: bug, regression, priority:high)"
+  debut: "date de création du ticket GitHub (proxy de détection, pas la détection réelle)"
+  fin: "date de fermeture (closed) du ticket, pas de post-mortem (inexistant dans ce contexte)"
+  rattachement_deploiement: "dernier déploiement en production avant l'ouverture du ticket sur la portion de code concernée — maillon le plus faible de la chaîne : c'est une corrélation temporelle, pas une causalité vérifiée"
+
+rework:
+  # Convention à fixer AVANT collecte : un déploiement est considéré comme
+  # rework/non planifié s'il correspond à un hotfix.
+  marqueur: "PR labellisée 'hotfix' OU commit dont le message commence par fix:/hotfix:/revert (convention à annoncer à l'équipe avant le premier déploiement mesuré)"
+
+fenetre_de_reference: "90 jours glissants"
+agregation: "hebdomadaire (semaine ISO) ; médiane pour lead time et MTTR, taux (ratio déploiements en échec / total) pour change failure rate"
+
+# ---------------------------------------------------------------------------
+# Phase 3 : à remplir après avoir vu les chiffres.
+# revision_envisagee: |
+#   ???
