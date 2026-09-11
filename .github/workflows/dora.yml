@@ -6,6 +6,7 @@ on:
 
 jobs:
   events:
+    permissions: write-all
     runs-on: ubuntu-latest
     steps:
       - name: Créer l'évènement de déploiement
