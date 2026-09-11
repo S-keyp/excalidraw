@@ -19,7 +19,8 @@ jobs:
               owner: context.repo.owner, repo: context.repo.repo,
               ref: context.sha, environment: 'production',
               required_contexts: [], auto_merge: false });
-            console.log("déploiement");
             return d.data.id;
-
+      - name: "Log déploiment"
+        run: |
+          echo "Deploiement réussi cette fois-ci"
       
