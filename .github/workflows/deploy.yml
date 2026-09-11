@@ -20,10 +20,6 @@ jobs:
               ref: context.sha, environment: 'production',
               required_contexts: [], auto_merge: false });
             return d.data.id;
+            echo "déploiement";
 
-      - name: Déployer
-        run: ./scripts/deploy.sh
-
-      - name: Marquer le déploiement comme réussi
-        if: success()
-        uses: actions/github-script@v9
+      
