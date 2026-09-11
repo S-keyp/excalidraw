@@ -19,7 +19,7 @@ jobs:
               owner: context.repo.owner, repo: context.repo.repo,
               ref: context.sha, environment: 'production',
               required_contexts: [], auto_merge: false });
-            return d.data.id; \
-            echo "déploiement";
+            console.log("déploiement");
+            return d.data.id;
 
       
